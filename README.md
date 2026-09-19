@@ -70,3 +70,15 @@ python -m venv .venv
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
+
+Kalau folder `.venv` sudah ada dan isinya `bin/` bukan `Scripts/`, itu venv bawaan macOS yang ikut terbawa waktu folder dipindah. Venv tidak bisa dipindah antar komputer karena menyimpan jalur absolut ke interpreternya. Hapus dulu dengan `rmdir /s /q .venv`, baru jalankan perintah di atas.
+
+Lalu buka **`http://127.0.0.1:8000`** di browser. Halaman antar mukanya disajikan oleh server yang sama, jadi tidak perlu menjalankan apa pun lagi. Dokumentasi API ada di `http://127.0.0.1:8000/docs`.
+
+## Deploy ke Vercel
+
+Berkas `main.py` dan `pyproject.toml` di akar repo hanya dipakai Vercel. Keduanya menunjuk aplikasi FastAPI di `backend/app/main.py` dan tidak memengaruhi cara menjalankan program di komputer sendiri.
+
+Yang penting, **Root Directory proyek Vercel harus akar repo, bukan `backend/`**. Kalau diarahkan ke `backend/`, folder `frontend/` tidak ikut terbundel sehingga halamannya menjawab `{"detail": "Not Found"}` sementara API-nya tetap jalan normal.
+
+Uvicorn sengaja tidak dicantumkan di `pyproject.toml` akar karena Vercel sendiri yang menjalankan ASGI-nya. Setelan `[tool.vercel.fastapi.static]` dengan `cdn = true` membuat berkas frontend tetap disajikan lewat CDN meskipun aplikasinya memakai `CORSMiddleware`.

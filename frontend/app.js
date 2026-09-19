@@ -1,4 +1,5 @@
 const ALAMAT_BACKEND = "http://127.0.0.1:8000";
+const DI_LOKAL = ["localhost", "127.0.0.1", ""].includes(location.hostname);
 let alamatApi = location.protocol.startsWith("http") ? "" : ALAMAT_BACKEND;
 
 const form = document.getElementById("form-cari");
@@ -66,7 +67,7 @@ async function ambilJson(jalur) {
   try {
     return await minta(alamatApi + jalur);
   } catch (galat) {
-    if (alamatApi !== "") throw galat;
+    if (alamatApi !== "" || !DI_LOKAL) throw galat;
     alamatApi = ALAMAT_BACKEND;
     return minta(alamatApi + jalur);
   }

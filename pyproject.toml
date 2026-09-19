@@ -1,0 +1,10 @@
+[project]
+name = "kka-tugas2"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.141.1",
+]
+
+[tool.vercel.fastapi.static]
+cdn = true
